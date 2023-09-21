@@ -1,41 +1,53 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import './App.css'
 
 function App() {
+  // State variables to manage the selected file,
+  // error message, and success status
   const [selectedFile, setSelectedFile] = useState();
   const [errorMsg, setErrorMsg] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // Event handler to update the selected file 
   const handleFileChange = (event) => {
     if(event.target.files.length > 0){
       setSelectedFile(event.target.files[0]);
     }
   };
 
+  // Function to validate the selected file size
   const validateSelectedFile = () => {
-    const MIN_FILE_SIZE = 1024 // 1MB
-    const MAX_FILE_SIZE = 5120 // 5MB
+    // Define min and max file size limits (in kilobytes)
+    const MIN_FILE_SIZE = 1024; // 1MB
+    const MAX_FILE_SIZE = 5120; // 5MB
 
+    // Check if a file has been selected
     if (!selectedFile) {
       setErrorMsg("Please choose a file");
-      setIsSuccess(false)
-      return
+      setIsSuccess(false);
+      return;
     }
 
-    const fileSizeKiloBytes = selectedFile.size / 1024
+    // Calculate the selected file's size in kilobytes
+    const fileSizeKiloBytes = selectedFile.size / 1024;
 
-    if(fileSizeKiloBytes < MIN_FILE_SIZE){
+    // Check if the file size is below the minimum limit
+    if (fileSizeKiloBytes < MIN_FILE_SIZE) {
       setErrorMsg("File size is less than minimum limit");
-      setIsSuccess(false)
-      return
+      setIsSuccess(false);
+      return;
     }
-    if(fileSizeKiloBytes > MAX_FILE_SIZE){
+    
+    // Check if the file size is above the maximum limit
+    if (fileSizeKiloBytes > MAX_FILE_SIZE) {
       setErrorMsg("File size is greater than maximum limit");
-      setIsSuccess(false)
-      return
+      setIsSuccess(false);
+      return;
     }
 
-    setErrorMsg("")
-    setIsSuccess(true)
+    // Reset error message and set success status when validation is successful
+    setErrorMsg("");
+    setIsSuccess(true);
   };
 
   return (
@@ -47,6 +59,8 @@ function App() {
 
         <div className="card-body">
           <p className="label">Choose File</p>
+          
+          {/* Input field for choosing a file */}
           <input
             type="file"
             name='file'
@@ -57,11 +71,16 @@ function App() {
             <p className="info-message">Min size: 1MB</p>
             <p className="info-message">Max size: 5MB</p>
           </div>
+          
+          {/* Display success message if validation is successful */}
           {isSuccess ? <p className="success-message">Validation successful</p> : null}
+          
+          {/* Display error message if there is an error */}
           <p className="error-message">{errorMsg}</p>
 
+          {/* Button to trigger file size validation */}
           <button className="btn" onClick={validateSelectedFile}>
-            Submit
+            SUBMIT
           </button>
         </div>
       </div>
